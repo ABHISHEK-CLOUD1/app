@@ -15,9 +15,13 @@ const Hero = () => {
     <section className="min-h-screen flex items-center justify-center bg-white pt-20">
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center max-w-4xl mx-auto">
-          {/* Icon or Visual Element */}
-          <div className="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100">
-            <Code className="w-10 h-10 text-gray-900" />
+          {/* Profile Photo */}
+          <div className="mb-8 inline-block">
+            <img
+              src="https://customer-assets.emergentagent.com/job_mishra-webhelp/artifacts/2ry616tg_IMG_6683.png"
+              alt="Abhishek Mishra"
+              className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover border-4 border-gray-100 shadow-lg"
+            />
           </div>
           
           {/* Main Heading */}
