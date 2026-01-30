@@ -34,10 +34,10 @@ const Contact = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await submitContactForm(formData);
+      const response = await axios.post(`${BACKEND_URL}/api/contact`, formData);
       toast({
         title: "Message Sent!",
-        description: response.message,
+        description: "Thank you! I'll get back to you soon.",
       });
       
       // Reset form
@@ -48,6 +48,7 @@ const Contact = () => {
         message: ''
       });
     } catch (error) {
+      console.error('Error submitting contact form:', error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
