@@ -81,6 +81,27 @@ async def get_status_checks():
     
     return status_checks
 
+@api_router.post("/contact", response_model=ContactMessage)
+async def create_contact_message(input: ContactMessageCreate):
+    try:
+        contact_dict = input.dict()
+        contact_obj = ContactMessage(**contact_dict)
+        await db.contacts.insert_one(contact_obj.dict())
+        logger.info(f"Contact message received from {contact_obj.email}")
+        return contact_obj
+    except Exception as e:
+        logger.error(f"Error creating contact message: {str(e)}")
+        raise
+
+@api_router.get("/contact", response_model=List[ContactMessage])
+async def get_contact_messages():
+    try:
+        contacts = await db.contacts.find().sort("created_at", -1).to_list(100)
+        return [ContactMessage(**contact) for contact in contacts]
+    except Exception as e:
+        logger.error(f"Error fetching contact messages: {str(e)}")
+        raise
+
 # Include the router in the main app
 app.include_router(api_router)
 
