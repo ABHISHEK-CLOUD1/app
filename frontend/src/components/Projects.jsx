@@ -1,94 +1,96 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { projects } from '../mock';
-import { Badge } from './ui/badge';
-import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 const Projects = () => {
+  const [hovered, setHovered] = useState(null);
+
   return (
-    <section id="projects" className="py-28 relative overflow-hidden" style={{ background: '#0d0d14' }}>
-      {/* Background accents */}
-      <div
-        className="absolute top-0 right-0 w-80 h-80 rounded-full blur-3xl opacity-10"
-        style={{ background: 'radial-gradient(circle, #a855f7, transparent)' }}
-      />
+    <section id="projects" className="relative py-32 px-8 md:px-16 lg:px-24 bg-[#050505] border-t border-white/5">
+      <div className="max-w-7xl mx-auto">
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section label */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-px bg-gradient-to-r from-violet-500 to-transparent" />
-          <span className="text-sm font-medium text-violet-400 tracking-widest uppercase">Projects</span>
+        <div className="flex items-center gap-4 mb-20">
+          <span className="font-mono text-[10px] tracking-[0.3em] text-white/30 uppercase">03</span>
+          <div className="section-line" />
+          <span className="font-mono text-[10px] tracking-[0.3em] text-white/30 uppercase">Selected Work</span>
         </div>
 
-        <div className="mb-14">
-          <h2
-            className="text-4xl md:text-5xl font-black text-white mb-4"
-            style={{ fontFamily: 'Outfit, sans-serif' }}
-          >
-            Featured <span className="gradient-text">work</span>
+        {/* Heading */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+          <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] leading-none tracking-wider uppercase text-white">
+            Featured<br />
+            <span className="text-white/40">Projects</span>
           </h2>
-          <p className="text-lg text-white/50 max-w-xl">
-            A selection of recent projects showcasing web solutions across different industries
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        {/* Projects grid — 2 column */}
+        <div className="grid md:grid-cols-2 gap-px bg-white/5">
           {projects.map((project, idx) => (
             <div
               key={project.id}
-              className="group glass-card rounded-2xl overflow-hidden cursor-pointer"
+              className="relative bg-[#050505] overflow-hidden group cursor-none"
+              onMouseEnter={() => setHovered(idx)}
+              onMouseLeave={() => setHovered(null)}
             >
               {/* Image */}
-              <div className="relative overflow-hidden aspect-video bg-white/5">
+              <div className="aspect-[4/3] overflow-hidden">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
+                  style={{
+                    filter: hovered === idx ? 'grayscale(0%) brightness(0.75)' : 'grayscale(30%) brightness(0.55)',
+                    transition: 'all 0.6s ease',
+                  }}
                   onError={(e) => {
-                    e.target.src = `https://via.placeholder.com/800x450/1a1a2e/7c3aed?text=${encodeURIComponent(project.title)}`;
+                    e.target.src = `https://images.unsplash.com/photo-1547954575-855750c57bd3?w=800&h=600&fit=crop`;
                   }}
                 />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-
-                {/* Category badge on image */}
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 text-xs font-medium text-white/90 bg-black/40 backdrop-blur-sm rounded-full border border-white/15">
-                    {project.category}
-                  </span>
-                </div>
-
-                {/* Arrow icon */}
-                <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm border border-white/15 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
-                  <ArrowUpRight className="w-4 h-4 text-white" />
-                </div>
               </div>
 
-              {/* Content */}
-              <div className="p-6">
-                <h3
-                  className="text-xl font-bold text-white mb-2 group-hover:gradient-text transition-colors"
-                  style={{ fontFamily: 'Outfit, sans-serif' }}
+              {/* Info overlay */}
+              <div className="p-8 flex items-end justify-between">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.25em] text-white/30 uppercase mb-2">
+                    {project.category}
+                  </p>
+                  <h3 className="font-display text-2xl tracking-wider uppercase text-white">
+                    {project.title}
+                  </h3>
+                  <p className="font-mono text-xs text-white/40 mt-2 max-w-xs">
+                    {project.description}
+                  </p>
+
+                  {/* Tech tags */}
+                  <div className="flex flex-wrap gap-3 mt-4">
+                    {project.technologies.map((tech, i) => (
+                      <span key={i} className="font-mono text-[10px] text-white/30 tracking-wider uppercase">
+                        {tech}{i < project.technologies.length - 1 ? ' /' : ''}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div
+                  className={`w-10 h-10 border border-white/10 flex items-center justify-center transition-all duration-300 flex-shrink-0 ${hovered === idx ? 'bg-white text-black border-white' : 'text-white'}`}
                 >
-                  {project.title}
-                </h3>
-
-                <p className="text-white/50 text-sm mb-4 leading-relaxed">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, i) => (
-                    <span
-                      key={i}
-                      className="px-2.5 py-1 text-xs font-medium text-purple-300 bg-purple-500/10 border border-purple-500/20 rounded-full"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                  <ArrowUpRight size={14} />
                 </div>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Marquee ticker */}
+        <div className="mt-24 border-t border-b border-white/5 py-4 overflow-hidden">
+          <div className="flex whitespace-nowrap animate-marquee">
+            {Array(6).fill(['Web Design', '—', 'Development', '—', 'Cloud Engineering', '—', 'DevOps', '—', 'Full Stack', '—']).flat().map((item, i) => (
+              <span key={i} className="font-mono text-xs tracking-[0.3em] text-white/20 uppercase mx-4">
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>

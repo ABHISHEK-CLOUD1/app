@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { personalInfo } from '../mock';
-import { Mail, Linkedin, Instagram, Send, CheckCircle } from 'lucide-react';
+import { Mail, Linkedin, Instagram, ArrowUpRight, Send } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import axios from 'axios';
 
@@ -8,12 +8,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Contact = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
@@ -26,186 +21,117 @@ const Contact = () => {
     setIsSubmitting(true);
     try {
       await axios.post(`${BACKEND_URL}/api/contact`, formData);
-      toast({ title: "Message Sent!", description: "Thank you! I'll get back to you soon." });
+      toast({ title: 'Message Sent!', description: "Thank you! I'll get back to you soon." });
       setFormData({ name: '', email: '', subject: '', message: '' });
-    } catch (error) {
-      console.error('Error submitting contact form:', error);
-      toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
+    } catch {
+      toast({ title: 'Error', description: 'Failed to send message. Please try again.', variant: 'destructive' });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const contactCards = [
-    {
-      icon: <Mail className="w-5 h-5" />,
-      label: 'Email',
-      value: personalInfo.email,
-      href: `mailto:${personalInfo.email}`,
-      gradient: 'from-violet-600 to-purple-500',
-    },
-    {
-      icon: <Linkedin className="w-5 h-5" />,
-      label: 'LinkedIn',
-      value: 'Connect with me',
-      href: personalInfo.linkedin,
-      gradient: 'from-blue-600 to-cyan-500',
-    },
-    {
-      icon: <Instagram className="w-5 h-5" />,
-      label: 'Instagram',
-      value: 'Follow me',
-      href: personalInfo.instagram,
-      gradient: 'from-pink-600 to-rose-500',
-    },
-  ];
-
   const inputClass = `
-    w-full px-4 py-3 rounded-xl text-white/90 text-sm
-    bg-white/5 border border-white/10 
-    focus:outline-none focus:border-purple-500/60 focus:bg-white/8
-    placeholder-white/25 transition-all duration-200
+    w-full bg-transparent border-0 border-b border-white/10 
+    py-4 font-mono text-sm text-white placeholder-white/20
+    focus:outline-none focus:border-white/40 transition-colors
+    tracking-wide
   `;
 
+  const channels = [
+    { icon: <Mail size={14} />, label: 'Email', value: personalInfo.email, href: `mailto:${personalInfo.email}` },
+    { icon: <Linkedin size={14} />, label: 'LinkedIn', value: 'Connect with me', href: personalInfo.linkedin },
+    { icon: <Instagram size={14} />, label: 'Instagram', value: 'Follow me', href: personalInfo.instagram },
+  ];
+
   return (
-    <section id="contact" className="py-28 relative overflow-hidden" style={{ background: '#0a0a0f' }}>
-      {/* Background accents */}
-      <div
-        className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-10"
-        style={{ background: 'radial-gradient(circle, #7c3aed, transparent)' }}
-      />
-      <div
-        className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl opacity-10"
-        style={{ background: 'radial-gradient(circle, #ec4899, transparent)' }}
-      />
+    <section id="contact" className="relative py-32 px-8 md:px-16 lg:px-24 bg-black border-t border-white/5">
+      <div className="max-w-7xl mx-auto">
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section label */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-px bg-gradient-to-r from-pink-500 to-transparent" />
-          <span className="text-sm font-medium text-pink-400 tracking-widest uppercase">Contact</span>
+        <div className="flex items-center gap-4 mb-20">
+          <span className="font-mono text-[10px] tracking-[0.3em] text-white/30 uppercase">04</span>
+          <div className="section-line" />
+          <span className="font-mono text-[10px] tracking-[0.3em] text-white/30 uppercase">Contact</span>
         </div>
 
-        <div className="mb-14">
-          <h2
-            className="text-4xl md:text-5xl font-black text-white mb-4"
-            style={{ fontFamily: 'Outfit, sans-serif' }}
-          >
-            Let's <span className="gradient-text">work together</span>
+        {/* Big heading */}
+        <div className="mb-20">
+          <h2 className="font-display text-[clamp(3rem,10vw,9rem)] leading-none tracking-wider uppercase text-white">
+            Let's
           </h2>
-          <p className="text-lg text-white/50 max-w-xl">
-            Have a project in mind? Let's discuss how I can help your business grow
-          </p>
+          <h2 className="font-display text-[clamp(3rem,10vw,9rem)] leading-none tracking-wider uppercase text-white/30">
+            Talk
+          </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Contact Cards */}
-          <div className="space-y-4">
-            {contactCards.map(({ icon, label, value, href, gradient }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-4 glass-card rounded-2xl p-4 no-underline"
-              >
-                <div className={`flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-lg`}>
-                  {icon}
-                </div>
-                <div>
-                  <p className="text-xs text-white/40 mb-0.5 font-medium uppercase tracking-wide">{label}</p>
-                  <p className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">{value}</p>
-                </div>
-              </a>
-            ))}
+        <div className="grid lg:grid-cols-2 gap-20">
+          {/* Left — Channels */}
+          <div>
+            <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-10 leading-relaxed max-w-xs">
+              Have a project in mind? Let's discuss how I can help your business grow online.
+            </p>
 
-            {/* Availability note */}
-            <div className="glass-card rounded-2xl p-5 border-green-500/20 bg-green-500/5">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-sm font-semibold text-green-400">Available for work</span>
-              </div>
-              <p className="text-xs text-white/40 leading-relaxed">
-                Open to freelance projects and full-time opportunities.
-              </p>
+            <div className="space-y-0 divide-y divide-white/5">
+              {channels.map(({ icon, label, value, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between py-5 hover:bg-white/[0.02] px-2 -mx-2 transition-colors"
+                >
+                  <div className="flex items-center gap-5">
+                    <span className="text-white/30 group-hover:text-white transition-colors">{icon}</span>
+                    <div>
+                      <p className="font-mono text-[10px] text-white/25 tracking-[0.2em] uppercase mb-0.5">{label}</p>
+                      <p className="font-mono text-sm text-white/60 group-hover:text-white transition-colors">{value}</p>
+                    </div>
+                  </div>
+                  <ArrowUpRight size={14} className="text-white/20 group-hover:text-white transition-colors" />
+                </a>
+              ))}
+            </div>
+
+            {/* Availability */}
+            <div className="mt-10 flex items-center gap-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              <span className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase">
+                Available for freelance &amp; full-time
+              </span>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="md:col-span-2">
-            <div className="glass-card rounded-2xl p-8">
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid md:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wide">Name</label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      placeholder="Your name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className={inputClass}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wide">Email</label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="your.email@example.com"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className={inputClass}
-                    />
-                  </div>
-                </div>
-
+          {/* Right — Form */}
+          <div>
+            <form onSubmit={handleSubmit} className="space-y-0">
+              <div className="grid grid-cols-2 gap-8">
                 <div>
-                  <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wide">Subject</label>
-                  <input
-                    id="subject"
-                    name="subject"
-                    type="text"
-                    placeholder="Project inquiry"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className={inputClass}
-                  />
+                  <label className="font-mono text-[10px] text-white/25 tracking-[0.3em] uppercase block mb-1">Name</label>
+                  <input name="name" type="text" placeholder="Your name" value={formData.name} onChange={handleChange} required className={inputClass} />
                 </div>
-
                 <div>
-                  <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wide">Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    placeholder="Tell me about your project..."
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={6}
-                    className={`${inputClass} resize-none`}
-                  />
+                  <label className="font-mono text-[10px] text-white/25 tracking-[0.3em] uppercase block mb-1">Email</label>
+                  <input name="email" type="email" placeholder="your@email.com" value={formData.email} onChange={handleChange} required className={inputClass} />
                 </div>
+              </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full flex items-center justify-center gap-2 py-4 text-base font-semibold text-white rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
-                  style={{
-                    background: 'var(--gradient-primary)',
-                    boxShadow: '0 0 20px rgba(124, 58, 237, 0.3)',
-                  }}
-                >
+              <div className="pt-8">
+                <label className="font-mono text-[10px] text-white/25 tracking-[0.3em] uppercase block mb-1">Subject</label>
+                <input name="subject" type="text" placeholder="Project inquiry" value={formData.subject} onChange={handleChange} required className={inputClass} />
+              </div>
+
+              <div className="pt-8">
+                <label className="font-mono text-[10px] text-white/25 tracking-[0.3em] uppercase block mb-1">Message</label>
+                <textarea name="message" placeholder="Tell me about your project..." value={formData.message} onChange={handleChange} required rows={5} className={`${inputClass} resize-none`} />
+              </div>
+
+              <div className="pt-10">
+                <button type="submit" disabled={isSubmitting} className="btn-white w-full justify-center">
                   {isSubmitting ? 'Sending...' : 'Send Message'}
-                  <Send className="w-4 h-4" />
+                  <Send size={13} />
                 </button>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

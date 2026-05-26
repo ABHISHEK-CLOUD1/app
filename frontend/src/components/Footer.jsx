@@ -1,114 +1,69 @@
 import React from 'react';
 import { personalInfo } from '../mock';
-import { Linkedin, Instagram, Github, Mail, Heart } from 'lucide-react';
+import { Linkedin, Instagram, Github, Mail } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   const navLinks = ['about', 'services', 'projects', 'contact'];
-
   const socials = [
-    { href: personalInfo.linkedin, icon: <Linkedin className="w-4 h-4" />, label: 'LinkedIn' },
-    { href: personalInfo.instagram, icon: <Instagram className="w-4 h-4" />, label: 'Instagram' },
-    { href: 'https://github.com', icon: <Github className="w-4 h-4" />, label: 'GitHub' },
-    { href: `mailto:${personalInfo.email}`, icon: <Mail className="w-4 h-4" />, label: 'Email' },
+    { href: personalInfo.linkedin, icon: <Linkedin size={13} />, label: 'LinkedIn' },
+    { href: personalInfo.instagram, icon: <Instagram size={13} />, label: 'Instagram' },
+    { href: 'https://github.com', icon: <Github size={13} />, label: 'GitHub' },
+    { href: `mailto:${personalInfo.email}`, icon: <Mail size={13} />, label: 'Email' },
   ];
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/8" style={{ background: '#080810' }}>
-      {/* Gradient top line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: 'var(--gradient-primary)', opacity: 0.6 }}
-      />
+    <footer className="relative bg-black border-t border-white/5 px-8 md:px-16 lg:px-24 py-10">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Brand */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="font-display text-xl tracking-[0.15em] text-white uppercase"
+        >
+          AM
+        </button>
 
-      {/* Background glow */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-40 rounded-full blur-3xl opacity-15"
-        style={{ background: 'radial-gradient(ellipse, #7c3aed, transparent)' }}
-      />
-
-      <div className="max-w-7xl mx-auto px-6 py-14 relative z-10">
-        <div className="grid md:grid-cols-3 gap-10 mb-12">
-          {/* Brand */}
-          <div>
-            <div
-              className="text-3xl font-black mb-3 gradient-text tracking-tight"
-              style={{ fontFamily: 'Outfit, sans-serif' }}
+        {/* Nav */}
+        <nav className="flex items-center gap-8">
+          {navLinks.map((item) => (
+            <button
+              key={item}
+              onClick={() => scrollTo(item)}
+              className="link-underline font-mono text-[10px] tracking-[0.25em] text-white/30 hover:text-white transition-colors uppercase"
             >
-              AM
-            </div>
-            <p className="text-sm text-white/40 leading-relaxed max-w-xs">
-              {personalInfo.tagline}
-            </p>
-          </div>
+              {item}
+            </button>
+          ))}
+        </nav>
 
-          {/* Quick Links */}
-          <div>
-            <h3
-              className="text-sm font-semibold text-white/80 mb-5 uppercase tracking-widest"
-              style={{ fontFamily: 'Outfit, sans-serif' }}
-            >
-              Navigation
-            </h3>
-            <ul className="space-y-3">
-              {navLinks.map((item) => (
-                <li key={item}>
-                  <button
-                    onClick={() => scrollTo(item)}
-                    className="text-sm text-white/40 hover:text-white transition-colors duration-200 capitalize"
-                  >
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Connect */}
-          <div>
-            <h3
-              className="text-sm font-semibold text-white/80 mb-5 uppercase tracking-widest"
-              style={{ fontFamily: 'Outfit, sans-serif' }}
-            >
-              Connect
-            </h3>
-
+        {/* Socials */}
+        <div className="flex items-center gap-5">
+          {socials.map(({ href, icon, label }) => (
             <a
-              href={`mailto:${personalInfo.email}`}
-              className="block text-sm text-white/40 hover:text-white transition-colors mb-5"
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="text-white/25 hover:text-white transition-colors"
             >
-              {personalInfo.email}
+              {icon}
             </a>
-
-            <div className="flex items-center gap-3">
-              {socials.map(({ href, icon, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-white/40 border border-white/10 bg-white/5 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-200"
-                >
-                  {icon}
-                </a>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
+      </div>
 
-        {/* Bottom bar */}
-        <div className="pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/25">
-          <p>&copy; {currentYear} {personalInfo.name}. All rights reserved.</p>
-          <p className="flex items-center gap-1.5">
-            Crafted with <Heart className="w-3 h-3 text-pink-500" fill="currentColor" /> and passion
-          </p>
-        </div>
+      {/* Bottom */}
+      <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="font-mono text-[10px] text-white/15 tracking-[0.2em] uppercase">
+          &copy; {currentYear} {personalInfo.name}. All rights reserved.
+        </p>
+        <p className="font-mono text-[10px] text-white/15 tracking-[0.2em] uppercase">
+          Software Engineer — {personalInfo.email}
+        </p>
       </div>
     </footer>
   );

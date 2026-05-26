@@ -1,27 +1,13 @@
 .App {
   min-height: 100vh;
-  background: #0a0a0f;
+  background: #000;
+  position: relative;
 }
 
-/* Focus outlines */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid rgba(124, 58, 237, 0.7);
-  outline-offset: 2px;
-}
-
-/* Smooth transitions */
-button,
-a {
-  transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
-}
-
-/* Gradient text helper */
-.gradient-text {
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  outline: 1px solid rgba(255,255,255,0.5);
+  outline-offset: 3px;
 }

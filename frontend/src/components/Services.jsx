@@ -1,80 +1,58 @@
 import React from 'react';
 import { services } from '../mock';
-import { Code, Palette, Smartphone, TrendingUp } from 'lucide-react';
-
-const iconMap = {
-  Code: Code,
-  Palette: Palette,
-  Smartphone: Smartphone,
-  TrendingUp: TrendingUp
-};
-
-const iconGradients = [
-  'from-violet-600 to-purple-500',
-  'from-pink-600 to-rose-500',
-  'from-blue-600 to-cyan-500',
-  'from-emerald-600 to-teal-500',
-];
+import { ArrowUpRight } from 'lucide-react';
 
 const Services = () => {
   return (
-    <section id="services" className="py-28 relative overflow-hidden" style={{ background: '#0a0a0f' }}>
-      {/* Background accents */}
-      <div
-        className="absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl opacity-10"
-        style={{ background: 'radial-gradient(circle, #ec4899, transparent)' }}
-      />
+    <section id="services" className="relative py-32 px-8 md:px-16 lg:px-24 bg-black border-t border-white/5">
+      <div className="max-w-7xl mx-auto">
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section label */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-px bg-gradient-to-r from-pink-500 to-transparent" />
-          <span className="text-sm font-medium text-pink-400 tracking-widest uppercase">Services</span>
+        <div className="flex items-center gap-4 mb-20">
+          <span className="font-mono text-[10px] tracking-[0.3em] text-white/30 uppercase">02</span>
+          <div className="section-line" />
+          <span className="font-mono text-[10px] tracking-[0.3em] text-white/30 uppercase">Services</span>
         </div>
 
-        <div className="mb-14">
-          <h2
-            className="text-4xl md:text-5xl font-black text-white mb-4"
-            style={{ fontFamily: 'Outfit, sans-serif' }}
-          >
-            What I <span className="gradient-text">offer</span>
+        {/* Heading */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+          <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] leading-none tracking-wider uppercase text-white">
+            What I<br />
+            <span className="text-white/40">Do</span>
           </h2>
-          <p className="text-lg text-white/50 max-w-xl">
+          <p className="font-mono text-xs text-white/30 tracking-[0.15em] uppercase max-w-xs leading-relaxed">
             Comprehensive web solutions to elevate your business in the digital world
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, idx) => {
-            const IconComponent = iconMap[service.icon];
-            return (
-              <div
-                key={service.id}
-                className="glass-card rounded-2xl p-8 group cursor-default"
-              >
-                {/* Icon */}
-                <div
-                  className={`mb-5 inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br ${iconGradients[idx]} shadow-lg`}
-                >
-                  <IconComponent className="w-7 h-7 text-white" />
-                </div>
-
+        {/* Services list — eDesign accordion-style rows */}
+        <div className="divide-y divide-white/8">
+          {services.map((service, idx) => (
+            <div
+              key={service.id}
+              className="group flex items-center justify-between py-8 hover:bg-white/[0.02] px-2 -mx-2 transition-all duration-300 cursor-none"
+            >
+              <div className="flex items-center gap-8 lg:gap-16">
+                <span className="font-mono text-[10px] text-white/20 tracking-[0.3em] w-6">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
                 <h3
-                  className="text-xl font-bold text-white mb-3"
-                  style={{ fontFamily: 'Outfit, sans-serif' }}
+                  className="font-display text-[clamp(1.5rem,4vw,3rem)] tracking-wider uppercase text-white group-hover:text-white/80 transition-colors"
                 >
                   {service.title}
                 </h3>
+              </div>
 
-                <p className="text-white/50 leading-relaxed text-sm">
+              <div className="flex items-center gap-8">
+                <p className="hidden lg:block font-mono text-xs text-white/30 max-w-xs leading-relaxed tracking-wide">
                   {service.description}
                 </p>
-
-                {/* Hover line accent */}
-                <div className={`mt-5 w-0 h-0.5 rounded-full bg-gradient-to-r ${iconGradients[idx]} group-hover:w-full transition-all duration-500`} />
+                <div className="w-10 h-10 border border-white/10 flex items-center justify-center group-hover:border-white/40 group-hover:bg-white group-hover:text-black transition-all duration-300">
+                  <ArrowUpRight size={14} />
+                </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </section>
