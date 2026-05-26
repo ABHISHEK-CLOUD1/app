@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { personalInfo } from '../mock';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { Label } from './ui/label';
-import { Card } from './ui/card';
-import { Mail, Linkedin, Instagram, Send } from 'lucide-react';
+import { Mail, Linkedin, Instagram, Send, CheckCircle } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import axios from 'axios';
 
@@ -23,140 +18,140 @@ const Contact = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/contact`, formData);
-      toast({
-        title: "Message Sent!",
-        description: "Thank you! I'll get back to you soon.",
-      });
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
+      await axios.post(`${BACKEND_URL}/api/contact`, formData);
+      toast({ title: "Message Sent!", description: "Thank you! I'll get back to you soon." });
+      setFormData({ name: '', email: '', subject: '', message: '' });
     } catch (error) {
       console.error('Error submitting contact form:', error);
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive"
-      });
+      toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const contactCards = [
+    {
+      icon: <Mail className="w-5 h-5" />,
+      label: 'Email',
+      value: personalInfo.email,
+      href: `mailto:${personalInfo.email}`,
+      gradient: 'from-violet-600 to-purple-500',
+    },
+    {
+      icon: <Linkedin className="w-5 h-5" />,
+      label: 'LinkedIn',
+      value: 'Connect with me',
+      href: personalInfo.linkedin,
+      gradient: 'from-blue-600 to-cyan-500',
+    },
+    {
+      icon: <Instagram className="w-5 h-5" />,
+      label: 'Instagram',
+      value: 'Follow me',
+      href: personalInfo.instagram,
+      gradient: 'from-pink-600 to-rose-500',
+    },
+  ];
+
+  const inputClass = `
+    w-full px-4 py-3 rounded-xl text-white/90 text-sm
+    bg-white/5 border border-white/10 
+    focus:outline-none focus:border-purple-500/60 focus:bg-white/8
+    placeholder-white/25 transition-all duration-200
+  `;
+
   return (
-    <section id="contact" className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Get In Touch
+    <section id="contact" className="py-28 relative overflow-hidden" style={{ background: '#0a0a0f' }}>
+      {/* Background accents */}
+      <div
+        className="absolute bottom-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-10"
+        style={{ background: 'radial-gradient(circle, #7c3aed, transparent)' }}
+      />
+      <div
+        className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl opacity-10"
+        style={{ background: 'radial-gradient(circle, #ec4899, transparent)' }}
+      />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Section label */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-8 h-px bg-gradient-to-r from-pink-500 to-transparent" />
+          <span className="text-sm font-medium text-pink-400 tracking-widest uppercase">Contact</span>
+        </div>
+
+        <div className="mb-14">
+          <h2
+            className="text-4xl md:text-5xl font-black text-white mb-4"
+            style={{ fontFamily: 'Outfit, sans-serif' }}
+          >
+            Let's <span className="gradient-text">work together</span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-white/50 max-w-xl">
             Have a project in mind? Let's discuss how I can help your business grow
           </p>
         </div>
-        
-        <div className="grid md:grid-cols-3 gap-12">
-          {/* Contact Information */}
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-6">
-                Contact Information
-              </h3>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Contact Cards */}
+          <div className="space-y-4">
+            {contactCards.map(({ icon, label, value, href, gradient }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-4 glass-card rounded-2xl p-4 no-underline"
+              >
+                <div className={`flex-shrink-0 w-11 h-11 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-lg`}>
+                  {icon}
+                </div>
+                <div>
+                  <p className="text-xs text-white/40 mb-0.5 font-medium uppercase tracking-wide">{label}</p>
+                  <p className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">{value}</p>
+                </div>
+              </a>
+            ))}
+
+            {/* Availability note */}
+            <div className="glass-card rounded-2xl p-5 border-green-500/20 bg-green-500/5">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-sm font-semibold text-green-400">Available for work</span>
+              </div>
+              <p className="text-xs text-white/40 leading-relaxed">
+                Open to freelance projects and full-time opportunities.
+              </p>
             </div>
-            
-            <Card className="p-4 border-gray-200 hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100">
-                  <Mail className="w-5 h-5 text-gray-900" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <a
-                    href={`mailto:${personalInfo.email}`}
-                    className="text-sm font-medium text-gray-900 hover:text-gray-700"
-                  >
-                    {personalInfo.email}
-                  </a>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-4 border-gray-200 hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100">
-                  <Linkedin className="w-5 h-5 text-gray-900" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">LinkedIn</p>
-                  <a
-                    href={personalInfo.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-medium text-gray-900 hover:text-gray-700"
-                  >
-                    Connect with me
-                  </a>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-4 border-gray-200 hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100">
-                  <Instagram className="w-5 h-5 text-gray-900" />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Instagram</p>
-                  <a
-                    href={personalInfo.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-medium text-gray-900 hover:text-gray-700"
-                  >
-                    Follow me
-                  </a>
-                </div>
-              </div>
-            </Card>
           </div>
-          
+
           {/* Contact Form */}
           <div className="md:col-span-2">
-            <Card className="p-8 border-gray-200">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input
+            <div className="glass-card rounded-2xl p-8">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid md:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wide">Name</label>
+                    <input
                       id="name"
                       name="name"
+                      type="text"
                       placeholder="Your name"
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="border-gray-300"
+                      className={inputClass}
                     />
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
+                  <div>
+                    <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wide">Email</label>
+                    <input
                       id="email"
                       name="email"
                       type="email"
@@ -164,27 +159,28 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="border-gray-300"
+                      className={inputClass}
                     />
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
-                  <Input
+
+                <div>
+                  <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wide">Subject</label>
+                  <input
                     id="subject"
                     name="subject"
+                    type="text"
                     placeholder="Project inquiry"
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="border-gray-300"
+                    className={inputClass}
                   />
                 </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
+
+                <div>
+                  <label className="block text-xs font-medium text-white/50 mb-2 uppercase tracking-wide">Message</label>
+                  <textarea
                     id="message"
                     name="message"
                     placeholder="Tell me about your project..."
@@ -192,20 +188,24 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     rows={6}
-                    className="border-gray-300 resize-none"
+                    className={`${inputClass} resize-none`}
                   />
                 </div>
-                
-                <Button
+
+                <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gray-900 hover:bg-gray-800 py-6"
+                  className="w-full flex items-center justify-center gap-2 py-4 text-base font-semibold text-white rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                  style={{
+                    background: 'var(--gradient-primary)',
+                    boxShadow: '0 0 20px rgba(124, 58, 237, 0.3)',
+                  }}
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
-                  <Send className="ml-2 w-4 h-4" />
-                </Button>
+                  <Send className="w-4 h-4" />
+                </button>
               </form>
-            </Card>
+            </div>
           </div>
         </div>
       </div>
